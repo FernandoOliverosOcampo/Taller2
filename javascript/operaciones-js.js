@@ -1,10 +1,18 @@
+const config = {
+  headers: {
+    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI',
+    Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI'
+  }
+}
+
 // Cuando cargue la página, se llenará automaticamente la tabla con los registros de la base de datos
 document.addEventListener('DOMContentLoaded', function () {
 
   const tablaPrincipalCuerpo = document.getElementById('tabla-principal-cuerpo');
 
-  axios.get('http://127.0.0.1:4000/mostrar_registros_tabla/')
+  axios.get('https://elofgzyhnliurwchnmse.supabase.co/rest/v1/vehiculos_renault?select=*', config)
     .then(function (response) {
+
       // response.data es el array que contiene la respuesta obtenida (response) y con forEach se itera en cada uno como si fuese un json
       response.data.forEach(datos => {
         const tr = document.createElement('tr');
@@ -74,7 +82,6 @@ btnAbrirModalModificar.onclick = function () {
   modificarPrecio.disabled = true;
   modificarKilometraje.disabled = true;
   btnModificarDatosModal.disabled = true;
-
 }
 
 btnCerrarModalModificar.onclick = function () {
@@ -100,7 +107,6 @@ btnAbrirModalEliminar.onclick = function () {
 btnCerrarModalEliminar.onclick = function () {
   modalEliminar.style.display = "none";
   const eliminarId = document.getElementById('eliminar-id');
-
   eliminarId.value = "";
 }
 
@@ -149,16 +155,20 @@ function insertar_datos_vehiculo() {
 
 
   const datos_insertar = {
-    campo_modelo: campo_modelo,
-    campo_año: campo_año,
-    campo_kilometraje: kilometraje + " km",
-    campo_precio: "$ " + precio
+    modelo: campo_modelo,
+    año: campo_año,
+    kilometraje: kilometraje + " km",
+    precio: "$ " + precio
   }
 
   axios({
     method: "POST",
-    url: "http://127.0.0.1:4000/insertar_datos_vehiculo/",
-    data: datos_insertar
+    url: "https://elofgzyhnliurwchnmse.supabase.co/rest/v1/vehiculos_renault",
+    data: datos_insertar,
+    headers: {
+      apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI',
+      Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI'
+    }
   })
     .then(res =>
       console.log(res))
@@ -181,17 +191,21 @@ function modificar_datos_vehiculo() {
     kilometraje = formato_kilometraje.format(modificarKilometraje);
 
     const respuestas_preguntas = {
-      modificarId: modificarId,
-      modificarModelo: modificarModelo,
-      modificarAño: modificarAño,
-      modificarKilometraje: kilometraje + " km",
-      modificarPrecio: "$ " + precio
+      modelo: modificarModelo,
+      año: modificarAño,
+      kilometraje: kilometraje + " km",
+      precio: "$ " + precio
     }
 
     axios({
-      method: "POST",
-      url: "http://127.0.0.1:4000/modificar_datos_vehiculo",
+      method: "UPDATE",
+      url: "https://elofgzyhnliurwchnmse.supabase.co/rest/v1/vehiculos_renault?id=is." + modificarId,
       data: respuestas_preguntas,
+      headers: {
+        apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI',
+        Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI',
+        Prefer: 'return=minimal'
+      }
     })
       .then(res =>
         console.log(res))
@@ -207,7 +221,14 @@ function eliminar_datos_vehiculo() {
     alert("Asegurate que los campos no estén vacíos");
   } else {
 
-    axios.delete("http://127.0.0.1:4000/eliminar_datos_vehiculo/" + eliminarId)
+    axios({
+      method: 'DELETE',
+      url: 'https://elofgzyhnliurwchnmse.supabase.co/rest/v1/vehiculos_renault?id=eq.' + eliminarId,
+      headers: {
+        apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI',
+        Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI'
+      }
+    })
       .then(res => {
         console.log(res);
       })
@@ -223,26 +244,33 @@ function buscar_datos_vehiculos() {
   let modificarPrecio = document.getElementById('modificar-precio');
   let modificarKilometraje = document.getElementById('modificar-kilometraje');
 
-  axios.get('http://127.0.0.1:4000/consultar_datos_vehiculo/' + idBuscar)
+  axios({
+    method: 'GET',
+    url: 'https://elofgzyhnliurwchnmse.supabase.co/rest/v1/vehiculos_renault?id=eq.' + idBuscar,
+    headers: {
+      apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI',
+      Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI'
+    }
+  })
     .then(function (response) {
 
-      precioFormateado = response.data[0][1];
+      precioFormateado = response.data[0].precio;
 
       const valorSinDolar = precioFormateado.replace("$", "");
       const precioFinal = Number(valorSinDolar.replace(/\./g, ""));
 
-      kmFormateado = response.data[0][4];
+      kmFormateado = response.data[0].kilometraje;
 
       const valorSinKm = kmFormateado.replace("km", "")
       const kmFinal = Number(valorSinKm.replace(/\./g, ""));
 
-      modificarAño.value = response.data[0][3];
-      modificarModelo.value = response.data[0][2];
+      modificarAño.value = response.data[0].año;
+      modificarModelo.value = response.data[0].modelo;
       modificarPrecio.value = precioFinal;
       modificarKilometraje.value = kmFinal;
     })
     .catch(function (error) {
-      console.log(error);
+      return error.code;
     });
 
 }
@@ -257,22 +285,30 @@ function consultar_datos_vehiculo() {
     alert("Asegurate que los campos no estén vacíos");
   } else {
 
-    axios.get('http://127.0.0.1:4000/consultar_datos_vehiculo/' + modalConsultarCampoId)
+    axios({
+      method: 'GET',
+      url: 'https://elofgzyhnliurwchnmse.supabase.co/rest/v1/vehiculos_renault?id=eq.' + modalConsultarCampoId,
+      headers: {
+        apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI',
+        Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI'
+      }
+    })
       .then(function (response) {
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
-        <td>${response.data[0][0]}</td>
-        <td>${response.data[0][2]}</td>
-        <td>${response.data[0][3]}</td>
-        <td>${response.data[0][4]}</td>
-        <td>${response.data[0][1]}</td>
+        <td>${response.data[0].id}</td>
+        <td>${response.data[0].modelo}</td>
+        <td>${response.data[0].año}</td>
+        <td>${response.data[0].kilometraje}</td>
+        <td>${response.data[0].precio}</td>
       `;
         tbodyConsultar.innerHTML = ''; // Elimina filas existentes
         tbodyConsultar.appendChild(tr);
 
       })
       .catch(function (error) {
-        console.log(error);
+        return error.code;
       });
   }
 
@@ -290,6 +326,7 @@ btnInsertarDatosModal.onclick = function () {
     if (confirm(text) == true) {
       alert("Registro insertado");
       insertar_datos_vehiculo();
+      modalInsertar.style.display = "none";
     } else {
       text = "You canceled!";
     }
@@ -303,11 +340,13 @@ btnModificarDatosModal.onclick = function () {
 
   if (modificarId == "" || modificarPrecio == "" || modificarKilometraje == "") {
     alert("Asegurate de rellenar todos los campos")
-  }else{
-    let text = "¿Estás seguro que deseas modificiar este registro?";
+  } else {
+    let text = "¿Estás seguro que deseas modificar este registro?";
     if (confirm(text) == true) {
-      alert("Registro modificado");
       modificar_datos_vehiculo();
+      alert("Registro modificado");
+      modalModificar.style.display = "none";
+
     } else {
       text = "You canceled!";
     }
@@ -322,7 +361,7 @@ btnBuscarModificarDatosModal.onclick = function () {
   if (modificarId == "") {
     alert("Tienes que ingresar un ID")
   } else {
-    buscar_datos_vehiculos();
+    buscar_datos_vehiculos()
     const modificarPrecio = document.getElementById('modificar-precio');
     const modificarKilometraje = document.getElementById('modificar-kilometraje');
     modificarPrecio.disabled = false;
@@ -334,7 +373,14 @@ btnBuscarModificarDatosModal.onclick = function () {
 btnEliminarDatosModal.onclick = function () {
   const eliminarId = document.getElementById('eliminar-id').value;
 
-  axios.get('http://127.0.0.1:4000/consultar_datos_vehiculo/' + eliminarId)
+  axios({
+    method: 'GET',
+    url: 'https://elofgzyhnliurwchnmse.supabase.co/rest/v1/vehiculos_renault?id=eq.' + eliminarId,
+    headers: {
+      apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI',
+      Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsb2ZnenlobmxpdXJ3Y2hubXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE1MDM5NTksImV4cCI6MTk5NzA3OTk1OX0.5zlT7FxiI7bD4as9wzXXKaprjKybRlUJe6Pnao_HhpI'
+    }
+  })
     .then(function (response) {
       precio = response.data[0][1];
       modelo = response.data[0][2];
@@ -345,6 +391,7 @@ btnEliminarDatosModal.onclick = function () {
       if (confirm(text) == true) {
         eliminar_datos_vehiculo();
         alert("Registro eliminado")
+        modalEliminar.style.display = "none";
       } else {
         text = "You canceled!";
       }
